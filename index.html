@@ -1,103 +1,101 @@
 <!DOCTYPE html>
-<html lang="th">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>หม่าล่าฟัดไฟ @ตลาด62 ขอนแก่น - เผ็ด ชา สะใจ</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #e74c3c;
-            --dark: #1a1a1a;
-            --gold: #f39c12;
-            --white: #ffffff;
-        }
-
-        body {
-            font-family: 'Sarabun', sans-serif;
-            margin: 0;
-            background-color: var(--dark);
-            color: var(--white);
-            text-align: center;
-        }
-
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
-                        url('https://images.unsplash.com/photo-1563245394-17f991e38ec0?q=80&w=1000'); /* เปลี่ยนเป็นรูปร้านจริงจะดีมาก */
-            background-size: cover;
-            background-position: center;
-            padding: 100px 20px;
-            border-bottom: 5px solid var(--primary);
-        }
-
-        h1 { font-size: 3rem; margin: 0; color: var(--primary); text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
-        .tagline { font-size: 1.2rem; color: var(--gold); margin-bottom: 30px; }
-
-        /* Menu Highlights */
-        .section { padding: 50px 20px; max-width: 800px; margin: 0 auto; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-        .card { background: #2c3e50; padding: 20px; border-radius: 15px; border: 1px solid #444; }
-        .card i { font-size: 30px; }
-
-        /* Buttons */
-        .btn {
-            display: inline-block;
-            padding: 15px 30px;
-            margin: 10px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-outline { border: 2px solid var(--gold); color: var(--gold); }
-        .btn:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(231,76,60,0.4); }
-
-        /* Footer */
-        footer { padding: 40px 20px; background: #111; font-size: 0.9rem; color: #666; }
-        .admin-link { color: #444; text-decoration: none; margin-top: 20px; display: block; }
-    </style>
+  <meta charset="UTF-8">
+  <title>หม่าล่าฟัดไฟ @ตลาด62 ขอนแก่น - เผ็ด ชา สะใจ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="หม่าล่ารสเด็ด พิกัดตลาด 62 ขอนแก่น ใกล้ มข. กังสดาล เผ็ดลิ้นชาสะใจ เปิดมื้อดึกถึง 23.30 น. จอดรถสะดวก">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary: #e74c3c;
+      --dark: #1a1a1a;
+      --gold: #f39c12;
+      --white: #ffffff;
+    }
+    body {
+      font-family: 'Sarabun', sans-serif;
+      margin: 0; background: var(--dark); color: var(--white);
+      -webkit-user-select: none; user-select: none;
+    }
+    .hero {
+      height: 60vh;
+      background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                  url('https://images.unsplash.com/photo-1512132411229-c30391241dd8?q=80&w=1000') center/cover;
+      display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+      padding: 20px;
+    }
+    .hero h1 { font-size: 3rem; color: var(--primary); margin: 0; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
+    .hero p { font-size: 1.2rem; margin: 10px 0; }
+    .cta-container { display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap; justify-content: center; }
+    .btn {
+      padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: bold;
+      transition: 0.3s; text-align: center; min-width: 150px;
+    }
+    .btn-order { background: var(--primary); color: white; }
+    .btn-map { background: transparent; border: 2px solid var(--white); color: white; }
+    .info-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px; padding: 40px 20px; max-width: 1000px; margin: auto;
+    }
+    .info-card { background: #262626; padding: 25px; border-radius: 15px; border-left: 5px solid var(--gold); }
+    .info-card h3 { color: var(--gold); margin-top: 0; }
+    .bottom-nav {
+      background: #111; padding: 20px; text-align: center; border-top: 1px solid #333;
+    }
+    .bottom-nav a { color: #888; text-decoration: none; font-size: 0.9rem; margin: 0 10px; }
+  </style>
 </head>
-<body>
 
-    <header class="hero">
-        <h1>หม่าล่าฟัดไฟ</h1>
-        <p class="tagline">🔥 เผ็ดลิ้นชา สะใจชาวขอนแก่น @ตลาด62 🔥</p>
-        
-        <a href="https://www.facebook.com/profile.php?id=100076917338212" target="_blank" class="btn btn-primary">📖 ดูเมนู & โปรโมชั่น</a>
-        <a href="https://www.google.com/maps/search/?api=1&query=หม่าล่าฟัดไฟ+ตลาด62" target="_blank" class="btn btn-outline">📍 นำทางไปร้าน</a>
-    </header>
+<body oncontextmenu="return false;">
 
-    <section class="section">
-        <h2>ทำไมต้อง "ฟัดไฟ"?</h2>
-        <div class="grid">
-            <div class="card">
-                <h3>🌶️ พริกสั่งตัด</h3>
-                <p>สูตรลับเฉพาะ เผ็ดร้อน ชาลิ้น ไม่เหมือนใคร</p>
-            </div>
-            <div class="card">
-                <h3>🍢 วัตถุดิบสดใหม่</h3>
-                <p>เลือกหยิบเองได้ตามใจชอบ เริ่มต้นไม้ละ 10.-</p>
-            </div>
-            <div class="card">
-                <h3>🌕 เปิดดึก</h3>
-                <p>ฟัดกันได้ยาวๆ ถึง 23.00 น.</p>
-            </div>
-            <div class="card">
-                <h3>🚗 ที่จอดรถสะดวก</h3>
-                <p>กว้างขวาง ในโครงการตลาด 62</p>
-            </div>
-        </div>
-    </section>
+  <section class="hero">
+    <h1>หม่าล่าฟัดไฟ</h1>
+    <p>ต้นตำรับความเผ็ดชา พิกัดตลาด 62 ขอนแก่น</p>
+    <div class="cta-container">
+      <a href="https://www.facebook.com/..." target="_blank" class="btn btn-order" onclick="trackClick('หน้าหลัก: คลิกสั่งซื้อ/ดูเมนู')">สั่งซื้อ / ดูเมนู</a>
+      <a href="https://maps.app.goo.gl/..." target="_blank" class="btn btn-map" onclick="trackClick('หน้าหลัก: คลิกดูแผนที่')">📍 แผนที่ร้าน</a>
+    </div>
+  </section>
 
-    <footer>
-        <p>เปิดให้บริการทุกวัน 16.30 - 23.00 น.</p>
-        <p>พิกัด: โครงการตลาด 62 (หลัง มข.) ขอนแก่น</p>
-        <hr style="border: 0.5px solid #222; width: 50%;">
-        
-        <a href="join.html" class="admin-link">ร่วมงานกับเรา (Recruitment)</a>
-    </footer>
+  <section class="info-grid">
+    <div class="info-card">
+      <h3>📍 ทำเลใกล้คุณ</h3>
+      <p>ร้านตั้งอยู่ใน <strong>โครงการตลาด 62</strong> ถนนกัลปพฤกษ์ ขอนแก่น</p>
+      <ul>
+        <li>ห่างจาก มข. (ฝั่งกังสดาล) 1.2 กม.</li>
+        <li>ห่างจาก เซ็นทรัล ขอนแก่น 2.4 กม.</li>
+      </ul>
+    </div>
+    <div class="info-card">
+      <h3>⏰ เวลาเปิด-ปิด</h3>
+      <p>ฟัดความอร่อยได้ทุกวัน<br><strong>16:30 - 23:30 น.</strong></p>
+    </div>
+    <div class="info-card">
+      <h3>🔥 จุดเด่นของร้าน</h3>
+      <p>ซอสสูตรพิเศษที่ให้ความเผ็ดชาแบบต้นตำรับ</p>
+    </div>
+  </section>
 
+  <footer class="bottom-nav">
+    <p>© 2026 หม่าล่าฟัดไฟ @ตลาด62 ขอนแก่น</p>
+    <a href="https://www.facebook.com/..." target="_blank" onclick="trackClick('หน้าหลัก: คลิก FB Footer')">Facebook</a> |
+    <a href="https://www.tiktok.com/..." target="_blank" onclick="trackClick('หน้าหลัก: คลิก TikTok Footer')">TikTok</a> |
+    <a href="?p=apply" style="color: var(--gold);" onclick="trackClick('หน้าหลัก: คลิกไปหน้าสมัครงาน')">ร่วมงานกับเรา (รับสมัครทีมงาน)</a>
+  </footer>
+
+  <script>
+    // ส่งข้อมูลไปบันทึกใน Google Sheet (ClickStats)
+    function trackClick(label) {
+      google.script.run.logClick(label);
+    }
+
+    document.onkeydown = function(e) {
+      if (e.keyCode == 123) return false;
+      if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) return false;
+      if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
+    };
+  </script>
 </body>
 </html>
