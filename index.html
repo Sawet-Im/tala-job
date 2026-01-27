@@ -84,8 +84,13 @@
     </div>
 
     <div class="seo-links">
-      <a href="https://www.facebook.com/profile.php?id=100076917338212" target="_blank" class="seo-button btn-fb">📖 บรรยากาศร้านหม่าล่าฟัดไฟ (FB)</a>
-      <a href="https://www.google.com/maps/search/?api=1&query=หม่าล่าฟัดไฟ&query_place_id=ChIJ8aKaKAWLIjERTxtFDO0zNaU" target="_blank" class="seo-button btn-maps">📍 ดูแผนที่ร้านบน Google Maps</a>
+      <a href="javascript:void(0)" 
+         onclick="trackClick('ดูบรรยากาศร้าน (FB)', 'https://www.facebook.com/profile.php?id=100076917338212')" 
+         class="seo-button btn-fb">📖 บรรยากาศร้านหม่าล่าฟัดไฟ (FB)</a>
+      
+      <a href="javascript:void(0)" 
+         onclick="trackClick('เช็คการเดินทาง (Maps)', 'https://goo.gl/maps/xxxx')" 
+         class="seo-button btn-maps">📍 ดูแผนที่ร้านบน Google Maps</a>
     </div>
 
     <div class="job-details">
@@ -184,6 +189,25 @@
 
   <script>
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzNP7S5erjtrZWd5Efn84AMP5SrcWb0Bmmu_tDDKd_Lq1jttHlU19IN0mI1GIRcpthV/exec";
+  function trackClick(label, targetUrl) {
+    // สร้างข้อมูลส่งไปเก็บสถิติ
+    const data = new FormData();
+    data.append('action', 'click_stat'); // ใส่เพื่อให้ฝั่ง Google Script รู้ว่าเป็นสถิติการคลิก
+    data.append('label', label);
+
+    // ส่งข้อมูลไปที่ Google Script (แบบ no-cors เหมือนฟอร์มสมัครงาน)
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: data
+    }).then(() => {
+      // เมื่อส่งเสร็จแล้ว ให้เปิดลิงก์ใหม่ไปยังปลายทาง
+      window.open(targetUrl, '_blank');
+    }).catch(err => {
+      // ถ้า Error ก็ให้เปิดลิงก์ไปเลย ลูกค้าจะได้ไม่สะดุด
+      window.open(targetUrl, '_blank');
+    });
+  }
 
   document.getElementById('mainForm').addEventListener('submit', function(e) {
     e.preventDefault();
