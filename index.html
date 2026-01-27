@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="th">
 <head>
   <meta charset="UTF-8">
   <title>หม่าล่าฟัดไฟ @ตลาด62 ขอนแก่น - เผ็ด ชา สะใจ</title>
@@ -10,41 +10,115 @@
   <style>
     :root {
       --primary: #e74c3c;
-      --dark: #1a1a1a;
+      --primary-dark: #c0392b;
+      --dark: #0f0f0f;
+      --card-bg: #1a1a1a;
       --gold: #f39c12;
       --white: #ffffff;
     }
+
     body {
       font-family: 'Sarabun', sans-serif;
       margin: 0; background: var(--dark); color: var(--white);
       -webkit-user-select: none; user-select: none;
+      scroll-behavior: smooth;
     }
+
+    /* Hero Section with Overlay */
     .hero {
-      height: 60vh;
-      background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+      height: 70vh;
+      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), 
                   url('https://images.unsplash.com/photo-1512132411229-c30391241dd8?q=80&w=1000') center/cover;
       display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
       padding: 20px;
+      animation: fadeIn 1s ease-out;
     }
-    .hero h1 { font-size: 3rem; color: var(--primary); margin: 0; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
-    .hero p { font-size: 1.2rem; margin: 10px 0; }
-    .cta-container { display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap; justify-content: center; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero h1 { 
+      font-size: clamp(2.5rem, 8vw, 4rem); 
+      color: var(--primary); 
+      margin: 0; 
+      text-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+      letter-spacing: 2px;
+    }
+
+    .hero p { font-size: 1.2rem; margin: 15px 0; color: #ccc; max-width: 600px; }
+
+    /* CTA Buttons */
+    .cta-container { display: flex; gap: 15px; margin-top: 30px; flex-wrap: wrap; justify-content: center; }
+    
     .btn {
-      padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: bold;
-      transition: 0.3s; text-align: center; min-width: 150px;
+      padding: 14px 32px; border-radius: 50px; text-decoration: none; font-weight: bold;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+      text-align: center; min-width: 160px;
+      text-transform: uppercase; letter-spacing: 1px;
     }
-    .btn-order { background: var(--primary); color: white; }
-    .btn-map { background: transparent; border: 2px solid var(--white); color: white; }
+
+    .btn-order { 
+      background: linear-gradient(45deg, var(--primary), #ff6b6b); 
+      color: white; 
+      box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+    }
+
+    .btn-map { 
+      background: rgba(255,255,255,0.1); 
+      border: 2px solid var(--white); 
+      color: white; 
+      backdrop-filter: blur(5px);
+    }
+
+    .btn:hover { transform: scale(1.08); box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
+
+    /* Info Cards */
     .info-grid {
       display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px; padding: 40px 20px; max-width: 1000px; margin: auto;
+      gap: 25px; padding: 60px 20px; max-width: 1100px; margin: auto;
     }
-    .info-card { background: #262626; padding: 25px; border-radius: 15px; border-left: 5px solid var(--gold); }
-    .info-card h3 { color: var(--gold); margin-top: 0; }
+
+    .info-card { 
+      background: var(--card-bg); 
+      padding: 30px; 
+      border-radius: 20px; 
+      border-bottom: 4px solid transparent;
+      transition: 0.3s;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .info-card:hover { 
+      border-bottom: 4px solid var(--primary); 
+      transform: translateY(-10px); 
+      background: #222;
+    }
+
+    .info-card h3 { color: var(--gold); margin-top: 0; font-size: 1.4rem; display: flex; align-items: center; gap: 10px; }
+    .info-card p, .info-card li { color: #bbb; line-height: 1.6; }
+
+    /* Footer / Bottom Nav */
     .bottom-nav {
-      background: #111; padding: 20px; text-align: center; border-top: 1px solid #333;
+      background: #0a0a0a; padding: 40px 20px; text-align: center; border-top: 1px solid #222;
     }
-    .bottom-nav a { color: #888; text-decoration: none; font-size: 0.9rem; margin: 0 10px; }
+    
+    .bottom-nav a { 
+      color: #777; text-decoration: none; font-size: 0.95rem; margin: 0 15px; 
+      transition: 0.3s;
+    }
+    
+    .bottom-nav a:hover { color: var(--primary); }
+
+    .apply-link { 
+      display: inline-block; margin-top: 20px; padding: 10px 20px;
+      color: var(--gold) !important; border: 1px dashed var(--gold); border-radius: 10px;
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 2.2rem; }
+      .btn { width: 100%; }
+    }
   </style>
 </head>
 
@@ -52,49 +126,72 @@
 
   <section class="hero">
     <h1>หม่าล่าฟัดไฟ</h1>
-    <p>ต้นตำรับความเผ็ดชา พิกัดตลาด 62 ขอนแก่น</p>
+    <p>🔥 ต้นตำรับความเผ็ดชา ที่จะทำให้คุณหยุดฟัดไม่ได้! พิกัดตลาด 62 ขอนแก่น</p>
     <div class="cta-container">
-      <a href="https://www.facebook.com/..." target="_blank" class="btn btn-order" onclick="trackClick('หน้าหลัก: คลิกสั่งซื้อ/ดูเมนู')">สั่งซื้อ / ดูเมนู</a>
-      <a href="https://maps.app.goo.gl/..." target="_blank" class="btn btn-map" onclick="trackClick('หน้าหลัก: คลิกดูแผนที่')">📍 แผนที่ร้าน</a>
+      <a href="https://www.facebook.com/profile.php?id=100076917338212" target="_blank" class="btn btn-order" onclick="trackClick('หน้าหลัก: คลิกสั่งซื้อ/ดูเมนู', this.href); return false;">📖 ดูเมนู & โปรโมชั่น</a>
+      <a href="https://goo.gl/maps/xxxx" target="_blank" class="btn btn-map" onclick="trackClick('หน้าหลัก: คลิกดูแผนที่', this.href); return false;">📍 แผนที่ร้าน</a>
     </div>
   </section>
 
   <section class="info-grid">
     <div class="info-card">
       <h3>📍 ทำเลใกล้คุณ</h3>
-      <p>ร้านตั้งอยู่ใน <strong>โครงการตลาด 62</strong> ถนนกัลปพฤกษ์ ขอนแก่น</p>
-      <ul>
-        <li>ห่างจาก มข. (ฝั่งกังสดาล) 1.2 กม.</li>
-        <li>ห่างจาก เซ็นทรัล ขอนแก่น 2.4 กม.</li>
+      <p>ตั้งอยู่ใน <strong>โครงการตลาด 62</strong> หลัง มข. (ฝั่งกังสดาล)</p>
+      <ul style="padding-left: 20px;">
+        <li>ใกล้แหล่งหอพัก มข. เดินทางสะดวก</li>
+        <li>ที่จอดรถกว้างขวาง ปลอดภัย</li>
       </ul>
     </div>
+
     <div class="info-card">
       <h3>⏰ เวลาเปิด-ปิด</h3>
-      <p>ฟัดความอร่อยได้ทุกวัน<br><strong>16:30 - 23:30 น.</strong></p>
+      <p>พร้อมเสิร์ฟความอร่อยทุกวันไม่มีวันหยุด</p>
+      <p style="font-size: 1.5rem; color: var(--white); font-weight: bold;">16:30 - 23:30 น.</p>
     </div>
+
     <div class="info-card">
-      <h3>🔥 จุดเด่นของร้าน</h3>
-      <p>ซอสสูตรพิเศษที่ให้ความเผ็ดชาแบบต้นตำรับ</p>
+      <h3>🌶️ จุดเด่น "ฟัดไฟ"</h3>
+      <p>พริกหม่าล่าคั่วเอง สูตรลับที่ให้ความ <strong>เผ็ดร้อน-ลิ้นชา</strong> แบบถึงใจ วัตถุดิบสดใหม่ ไม้ต่อไม้</p>
     </div>
   </section>
 
   <footer class="bottom-nav">
-    <p>© 2026 หม่าล่าฟัดไฟ @ตลาด62 ขอนแก่น</p>
-    <a href="https://www.facebook.com/..." target="_blank" onclick="trackClick('หน้าหลัก: คลิก FB Footer')">Facebook</a> |
-    <a href="https://www.tiktok.com/..." target="_blank" onclick="trackClick('หน้าหลัก: คลิก TikTok Footer')">TikTok</a> |
-    <a href="?p=apply" style="color: var(--gold);" onclick="trackClick('หน้าหลัก: คลิกไปหน้าสมัครงาน')">ร่วมงานกับเรา (รับสมัครทีมงาน)</a>
+    <p style="color: #555;">© 2026 หม่าล่าฟัดไฟ @ตลาด62 ขอนแก่น</p>
+    <div style="margin: 20px 0;">
+      <a href="https://www.facebook.com/..." target="_blank" onclick="trackClick('หน้าหลัก: คลิก FB Footer', this.href); return false;">Facebook</a>
+      <a href="https://www.tiktok.com/..." target="_blank" onclick="trackClick('หน้าหลัก: คลิก TikTok Footer', this.href); return false;">TikTok</a>
+    </div>
+    <a href="join.html" class="apply-link" onclick="trackClick('หน้าหลัก: คลิกไปหน้าสมัครงาน', this.href); return false;">💼 ร่วมงานกับเรา (รับสมัครทีมงาน)</a>
   </footer>
 
   <script>
-    // ส่งข้อมูลไปบันทึกใน Google Sheet (ClickStats)
-    function trackClick(label) {
-      google.script.run.logClick(label);
+    const SCRIPT_URL = "URL_GOOGLE_SCRIPT_ของคุณ"; // ใส่ URL เดิมที่คุณใช้
+
+    function trackClick(label, targetUrl) {
+      const data = new FormData();
+      data.append('action', 'click_stat');
+      data.append('label', label);
+
+      // ส่งข้อมูลไปบันทึกสถิติ
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: data
+      });
+
+      // เปิดลิงก์ปลายทาง
+      if(targetUrl) {
+        setTimeout(() => {
+          window.open(targetUrl, targetUrl.startsWith('http') ? '_blank' : '_self');
+        }, 100);
+      }
     }
 
+    // ป้องกันการกด F12 / Inspect
     document.onkeydown = function(e) {
-      if (e.keyCode == 123) return false;
-      if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) return false;
-      if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
+      if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) || (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0))) {
+        return false;
+      }
     };
   </script>
 </body>
