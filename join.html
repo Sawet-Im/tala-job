@@ -236,7 +236,7 @@
   </div>
 
   <script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyqybG4Iz5pxlu6noWUYLZAEKpeCtUKLm0K54C0S-c41iqrrZ-jhFz6Ltm4W7cO9Nzl/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwDrotbcXknFIZPbPGIlqxOUbhz-ygxl3qDiiuLJAcNrJQfRYAvrwMLYcuEyLcftX3Y/exec";
 
   function trackClick(label, targetUrl) {
     const data = new FormData();
@@ -260,12 +260,24 @@
     btn.disabled = true;
     status.innerText = "กำลังส่งใบสมัคร...";
 
-    const formData = new FormData(this); // สร้าง FormData จากฟอร์ม
+    // ใช้ URLSearchParams แทน FormData เพื่อความแน่นอนในการส่งแบบ simple parameter กับ Apps Script
+    const formData = new URLSearchParams();
+    
+    // ดึงค่าทั้งหมดจาก Form ใส่ใน URLSearchParams
+    const formElements = this.elements;
+    for (let i = 0; i < formElements.length; i++) {
+        if (formElements[i].name && formElements[i].type !== 'file' && formElements[i].type !== 'submit') {
+            if (formElements[i].type === 'radio') {
+                if (formElements[i].checked) formData.append(formElements[i].name, formElements[i].value);
+            } else {
+                formData.append(formElements[i].name, formElements[i].value);
+            }
+        }
+    }
 
-    // --- ส่วนประมวลผลไฟล์รูปภาพ ---
     const photoFile = document.getElementById('photoUpload').files[0];
     if (photoFile) {
-        if (photoFile.size > 5 * 1024 * 1024) { // เช็คขนาดไฟล์ (ไม่เกิน 5MB)
+        if (photoFile.size > 5 * 1024 * 1024) {
             alert("ขนาดไฟล์รูปภาพต้องไม่เกิน 5MB");
             btn.disabled = false;
             status.innerText = "";
@@ -273,25 +285,34 @@
         }
 
         const reader = new FileReader();
-        reader.readAsDataURL(photoFile); // อ่านไฟล์เป็น Base64
         reader.onload = function() {
-            // เพิ่มข้อมูลไฟล์ลงใน formData เพื่อส่งไป Apps Script
-            formData.append('photo_file', reader.result.split(',')[1]); // Base64 Data
+            formData.append('photo_file', reader.result.split(',')[1]);
             formData.append('file_name', photoFile.name);
             formData.append('file_type', photoFile.type);
             
-            // ส่งข้อมูลไปยัง Google Apps Script
-            sendFormData(formData, btn, status);
+            submitToScript(formData);
         };
-        reader.onerror = function(error) {
-            console.error("Error reading file:", error);
-            alert("เกิดข้อผิดพลาดในการอ่านไฟล์รูปภาพ กรุณาลองใหม่");
+        reader.readAsDataURL(photoFile);
+    } else {
+        submitToScript(formData);
+    }
+
+    function submitToScript(params) {
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: params.toString(), // ส่งเป็น String
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        })
+        .then(res => {
+            document.getElementById('mainForm').style.display = 'none';
+            document.getElementById('successMsg').style.display = 'block';
+            window.scrollTo(0, 0);
+        })
+        .catch(err => {
+            alert("เกิดข้อผิดพลาด: " + err);
             btn.disabled = false;
             status.innerText = "";
-        };
-    } else {
-        // ถ้าไม่มีไฟล์รูปภาพ ก็ส่งข้อมูลฟอร์มปกติ
-        sendFormData(formData, btn, status);
+        });
     }
   });
 
