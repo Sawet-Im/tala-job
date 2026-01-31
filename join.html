@@ -236,16 +236,8 @@
   </div>
 
   <script>
-  // วาง URL ที่ได้จากการ Deploy ใหม่ตรงนี้
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx7pLuRVHNPplu1r4g8jq6r6TKV9JWnCf8bqc2AdbTfOog3Ppke89nCo7iTZ2Ko9ApQ/exec";
-
-  function trackClick(label, targetUrl) {
-    const data = new URLSearchParams();
-    data.append('action', 'click_stat');
-    data.append('label', label);
-    fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: data });
-    window.open(targetUrl, '_blank');
-  }
+  // ใช้ URL ที่ได้จากการ Deploy ใหม่ล่าสุดเท่านั้น
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxgiE6HnD_BZnxo3NFJkaMbrYAXp28KUotFoQkJraR5ncNQnjKybJAVPS5mlkt7vrvz/exec";
 
   document.getElementById('mainForm').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -253,51 +245,35 @@
     const status = document.getElementById('status');
     
     btn.disabled = true;
-    status.innerText = "กำลังอัปโหลดข้อมูลและรูปภาพ...";
+    status.innerText = "กำลังส่งข้อมูลทดสอบ...";
 
     const formData = new FormData(this);
-    const photoFile = document.getElementById('photoUpload').files[0];
+    const params = new URLSearchParams();
 
-    const sendData = (base64String = "", fileType = "") => {
-      const params = new URLSearchParams();
-      formData.forEach((value, key) => {
-        if (key !== 'photo_upload') params.append(key, value);
-      });
-      
-      if (base64String) {
-        params.append('photo_file', base64String);
-        params.append('file_type', fileType);
+    // ดึงค่าทุกอย่างยกเว้นไฟล์ส่งไป
+    formData.forEach((value, key) => {
+      if (key !== 'photo_upload') {
+        params.append(key, value);
       }
+    });
 
-      // ใช้ mode: 'no-cors' เพื่อป้องกันการบล็อกจาก Browser
-      fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors', 
-        body: params.toString(),
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-      })
-      .then(() => {
-        // เนื่องจากเป็น no-cors เราจะไม่เห็น response success แต่ถ้าไม่มี error ข้อมูลจะเข้า
-        document.getElementById('mainForm').style.display = 'none';
-        document.getElementById('successMsg').style.display = 'block';
-        window.scrollTo(0, 0);
-      })
-      .catch(err => {
-        alert("เกิดข้อผิดพลาด: " + err.toString());
-        btn.disabled = false;
-        status.innerText = "";
-      });
-    };
-
-    if (photoFile) {
-      const reader = new FileReader();
-      reader.onload = function() {
-        sendData(reader.result.split(',')[1], photoFile.type);
-      };
-      reader.readAsDataURL(photoFile);
-    } else {
-      sendData();
-    }
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors', // สำคัญมากสำหรับการส่งไป Google Script
+      body: params.toString(),
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+    })
+    .then(() => {
+      // เมื่อส่งสำเร็จ (หรือ Google รับข้อมูลแล้ว)
+      document.getElementById('mainForm').style.display = 'none';
+      document.getElementById('successMsg').style.display = 'block';
+      window.scrollTo(0, 0);
+    })
+    .catch(err => {
+      alert("เกิดข้อผิดพลาด: " + err.toString());
+      btn.disabled = false;
+      status.innerText = "";
+    });
   });
 </script>
 </body>
