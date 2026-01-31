@@ -236,35 +236,55 @@
   </div>
 
   <script>
-  // ใช้ URL ที่ได้จากการ Deploy ใหม่ล่าสุดเท่านั้น
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxgiE6HnD_BZnxo3NFJkaMbrYAXp28KUotFoQkJraR5ncNQnjKybJAVPS5mlkt7vrvz/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw4Gx9AxEt4DoLkrqlETvkIlKc5BziDUUcKxD1tay2cZn8liY-F9TZAL3TpyAGejfYT/exec";
 
-  document.getElementById('mainForm').addEventListener('submit', function(e) {
+  document.getElementById('mainForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     const btn = document.getElementById('submitBtn');
     const status = document.getElementById('status');
     
     btn.disabled = true;
-    status.innerText = "กำลังส่งข้อมูลทดสอบ...";
+    status.innerText = "กำลังอัปโหลดข้อมูลและรูปภาพ (อาจใช้เวลาสักครู่)...";
 
     const formData = new FormData(this);
-    const params = new URLSearchParams();
+    const photoFile = document.getElementById('photoUpload').files[0];
+    let base64String = "";
+    let fileType = "";
 
-    // ดึงค่าทุกอย่างยกเว้นไฟล์ส่งไป
-    formData.forEach((value, key) => {
-      if (key !== 'photo_upload') {
-        params.append(key, value);
+    // ฟังก์ชันอ่านไฟล์รูป
+    if (photoFile) {
+      if (photoFile.size > 2 * 1024 * 1024) { // จำกัดไว้ที่ 2MB เพื่อความเร็วและไม่เกินขีดจำกัด GAS
+        alert("รูปภาพใหญ่เกินไป กรุณาใช้รูปขนาดไม่เกิน 2MB");
+        btn.disabled = false; status.innerText = ""; return;
       }
+      
+      const reader = new FileReader();
+      const readPromise = new Promise((resolve) => {
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+        reader.readAsDataURL(photoFile);
+      });
+      base64String = await readPromise;
+      fileType = photoFile.type;
+    }
+
+    // เตรียมส่งข้อมูล
+    const params = new URLSearchParams();
+    formData.forEach((value, key) => {
+      if (key !== 'photo_upload') params.append(key, value);
     });
+    
+    if (base64String) {
+      params.append('photo_file', base64String);
+      params.append('file_type', fileType);
+    }
 
     fetch(SCRIPT_URL, {
       method: 'POST',
-      mode: 'no-cors', // สำคัญมากสำหรับการส่งไป Google Script
+      mode: 'no-cors',
       body: params.toString(),
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
     })
     .then(() => {
-      // เมื่อส่งสำเร็จ (หรือ Google รับข้อมูลแล้ว)
       document.getElementById('mainForm').style.display = 'none';
       document.getElementById('successMsg').style.display = 'block';
       window.scrollTo(0, 0);
