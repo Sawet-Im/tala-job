@@ -45,7 +45,6 @@
     .btn-fb { color: var(--fb-blue); border-color: var(--fb-blue); background: #f0f7ff; }
     .btn-maps { color: var(--maps-red); border-color: var(--maps-red); background: #fff5f5; }
 
-    /* ปรับแต่งส่วนรายละเอียดงานใหม่ให้ชัดเจน */
     .job-details {
       background: #2c3e50;
       padding: 25px;
@@ -65,6 +64,36 @@
 
     .section-title { font-weight: 600; margin-top: 20px; margin-bottom: 8px; display: block; font-size: 15px; }
     input, select, textarea { width: 100%; padding: 12px 15px; border: 2px solid #edf2f7; border-radius: 10px; box-sizing: border-box; font-family: inherit; font-size: 15px; background: #fdfdfd; }
+    /* สไตล์สำหรับ input type="file" โดยเฉพาะ */
+    input[type="file"] {
+        padding: 10px 15px; /* ปรับ padding ให้เหมาะสม */
+        background-color: #e9ecef; /* สีพื้นหลัง */
+        color: var(--text-dark); /* สีตัวอักษร */
+        cursor: pointer; /* แสดงผลเป็นตัวชี้ */
+    }
+    input[type="file"]::-webkit-file-upload-button {
+        visibility: hidden;
+    }
+    input[type="file"]::before {
+        content: 'เลือกไฟล์รูปภาพ';
+        display: inline-block;
+        background: var(--secondary-color);
+        color: white;
+        border-radius: 5px;
+        padding: 8px 12px;
+        outline: none;
+        white-space: nowrap;
+        -webkit-user-select: none;
+        cursor: pointer;
+        font-weight: 500;
+        font-size: 14px;
+        margin-right: 10px;
+    }
+    input[type="file"]:hover::before {
+        background: #e6a73c;
+    }
+
+
     .schedule-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; font-size: 14px; }
     .schedule-table td { padding: 10px; background: #f8fafc; text-align: center; border-radius: 8px; }
     .flex-row { display: flex; gap: 15px; flex-wrap: wrap; }
@@ -124,6 +153,20 @@
     </div>
 
     <form id="mainForm">
+      <label class="section-title">ตำแหน่งที่สนใจสมัคร *</label>
+      <select name="position" required>
+        <option value="">-- เลือกตำแหน่ง --</option>
+        <option>พนักงานปิ้งย่าง</option>
+        <option>พนักงานบริการ/รับออเดอร์</option>
+        <option>พนักงานเตรียมวัตถุดิบ/ล้างจาน</option>
+        <option>ทั่วไป (ทำได้ทุกหน้าที่)</option>
+      </select>
+
+      <label class="section-title">รูปถ่ายแนะนำตัว *</label>
+      <input type="file" name="photo_upload" id="photoUpload" accept="image/*" required>
+      <p style="font-size: 0.85em; color: #777; margin-top: 5px;">*รองรับไฟล์ JPG, PNG ขนาดไม่เกิน 5MB</p>
+
+
       <label class="section-title">ชื่อ-นามสกุล *</label>
       <input type="text" name="fullname" placeholder="ชื่อ-นามสกุล" required>
 
@@ -193,20 +236,19 @@
   </div>
 
   <script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby1cmFBXfbO767ZTQaZ2U0lo_ykZgmgSUlxQbU5dcZ4DYyNsqc0XZSmlKw0UzTj_j_t/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyqybG4Iz5pxlu6noWUYLZAEKpeCtUKLm0K54C0S-c41iqrrZ-jhFz6Ltm4W7cO9Nzl/exec";
+
   function trackClick(label, targetUrl) {
     const data = new FormData();
     data.append('action', 'click_stat');
     data.append('label', label);
 
-    // ส่งข้อมูลแบบไม่รอผลลัพธ์ (Fire and Forget) เพื่อให้ลิงก์ไปต่อได้ทันที
     fetch(SCRIPT_URL, {
       method: 'POST',
       mode: 'no-cors',
       body: data
     });
 
-    // เปิดลิงก์ใหม่ทันที
     window.open(targetUrl, '_blank');
   }
 
@@ -218,15 +260,49 @@
     btn.disabled = true;
     status.innerText = "กำลังส่งใบสมัคร...";
 
-    const formData = new FormData(this);
+    const formData = new FormData(this); // สร้าง FormData จากฟอร์ม
 
+    // --- ส่วนประมวลผลไฟล์รูปภาพ ---
+    const photoFile = document.getElementById('photoUpload').files[0];
+    if (photoFile) {
+        if (photoFile.size > 5 * 1024 * 1024) { // เช็คขนาดไฟล์ (ไม่เกิน 5MB)
+            alert("ขนาดไฟล์รูปภาพต้องไม่เกิน 5MB");
+            btn.disabled = false;
+            status.innerText = "";
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.readAsDataURL(photoFile); // อ่านไฟล์เป็น Base64
+        reader.onload = function() {
+            // เพิ่มข้อมูลไฟล์ลงใน formData เพื่อส่งไป Apps Script
+            formData.append('photo_file', reader.result.split(',')[1]); // Base64 Data
+            formData.append('file_name', photoFile.name);
+            formData.append('file_type', photoFile.type);
+            
+            // ส่งข้อมูลไปยัง Google Apps Script
+            sendFormData(formData, btn, status);
+        };
+        reader.onerror = function(error) {
+            console.error("Error reading file:", error);
+            alert("เกิดข้อผิดพลาดในการอ่านไฟล์รูปภาพ กรุณาลองใหม่");
+            btn.disabled = false;
+            status.innerText = "";
+        };
+    } else {
+        // ถ้าไม่มีไฟล์รูปภาพ ก็ส่งข้อมูลฟอร์มปกติ
+        sendFormData(formData, btn, status);
+    }
+  });
+
+  // ฟังก์ชันสำหรับส่งข้อมูลไปยัง Google Apps Script
+  function sendFormData(formData, btn, status) {
     fetch(SCRIPT_URL, {
       method: 'POST',
       body: formData,
-      mode: 'no-cors' // บังคับให้ส่งได้แม้จะอยู่คนละโดเมน
+      mode: 'no-cors'
     })
     .then(() => {
-      // เนื่องจากใช้ no-cors เราจะไม่ได้รับค่าตอบกลับ ให้ถือว่าสำเร็จเลย
       document.getElementById('mainForm').style.display = 'none';
       document.getElementById('successMsg').style.display = 'block';
       window.scrollTo(0, 0);
@@ -237,7 +313,7 @@
       btn.disabled = false;
       status.innerText = "";
     });
-  });
+  }
 </script>
 </body>
 </html>
