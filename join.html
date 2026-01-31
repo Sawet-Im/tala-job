@@ -236,17 +236,14 @@
   </div>
 
   <script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby7TwELQ125hBzgr0bDzkzoLV_1alpDnnFM2cjGbPNmcGPxKJWc5zdsVaciSBFM0Pr7/exec";
+  // วาง URL ที่ได้จากการ Deploy ใหม่ตรงนี้
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx7pLuRVHNPplu1r4g8jq6r6TKV9JWnCf8bqc2AdbTfOog3Ppke89nCo7iTZ2Ko9ApQ/exec";
 
   function trackClick(label, targetUrl) {
     const data = new URLSearchParams();
     data.append('action', 'click_stat');
     data.append('label', label);
-    fetch(SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      body: data
-    });
+    fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: data });
     window.open(targetUrl, '_blank');
   }
 
@@ -256,57 +253,50 @@
     const status = document.getElementById('status');
     
     btn.disabled = true;
-    status.innerText = "กำลังอัปโหลดรูปและส่งใบสมัคร...";
+    status.innerText = "กำลังอัปโหลดข้อมูลและรูปภาพ...";
 
     const formData = new FormData(this);
     const photoFile = document.getElementById('photoUpload').files[0];
-    const reader = new FileReader();
 
-    reader.onload = function() {
-      // เตรียมข้อมูลทั้งหมดเป็น URLSearchParams เพื่อส่งให้ Apps Script
+    const sendData = (base64String = "", fileType = "") => {
       const params = new URLSearchParams();
       formData.forEach((value, key) => {
-        // กรองเฉพาะค่าที่ไม่ใช่ไฟล์จาก FormData
         if (key !== 'photo_upload') params.append(key, value);
       });
       
-      // เพิ่มข้อมูลไฟล์รูปภาพที่แปลงเป็น Base64 แล้ว
-      if (photoFile) {
-        params.append('photo_file', reader.result.split(',')[1]);
-        params.append('file_name', photoFile.name);
-        params.append('file_type', photoFile.type);
+      if (base64String) {
+        params.append('photo_file', base64String);
+        params.append('file_type', fileType);
       }
 
+      // ใช้ mode: 'no-cors' เพื่อป้องกันการบล็อกจาก Browser
       fetch(SCRIPT_URL, {
         method: 'POST',
+        mode: 'no-cors', 
         body: params.toString(),
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       })
-      .then(res => {
-        // เมื่อสำเร็จ ซ่อนฟอร์มและแสดงข้อความขอบคุณ
+      .then(() => {
+        // เนื่องจากเป็น no-cors เราจะไม่เห็น response success แต่ถ้าไม่มี error ข้อมูลจะเข้า
         document.getElementById('mainForm').style.display = 'none';
         document.getElementById('successMsg').style.display = 'block';
         window.scrollTo(0, 0);
       })
       .catch(err => {
-        console.error(err);
-        alert("เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองใหม่");
+        alert("เกิดข้อผิดพลาด: " + err.toString());
         btn.disabled = false;
         status.innerText = "";
       });
     };
 
     if (photoFile) {
-      if (photoFile.size > 5 * 1024 * 1024) {
-        alert("ขนาดไฟล์รูปภาพต้องไม่เกิน 5MB");
-        btn.disabled = false;
-        status.innerText = "";
-        return;
-      }
+      const reader = new FileReader();
+      reader.onload = function() {
+        sendData(reader.result.split(',')[1], photoFile.type);
+      };
       reader.readAsDataURL(photoFile);
     } else {
-      // กรณีไม่มีไฟล์รูป (ซึ่งฟอร์มคุณบังคับไว้ แต่อันนี้กันเหนียว)
-      reader.onload();
+      sendData();
     }
   });
 </script>
