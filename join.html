@@ -245,24 +245,26 @@
   </div>
 
   <script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwADkpQ8aGSYdcCRSwvAa75oDJe3K5VZfrFFsrrBia-H9lC7YaHjdHYiU38A9Uy8IVp/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwDn2K2eipTV5OOjcoQf6gTyER_UyHCAdJPuaNuXfWZnPUwdxLjGeKNXN-MUSiAero/exec";
   
   function trackClick(buttonName, url) {
-    const params = new URLSearchParams();
-    params.append('type', 'click');
-    params.append('buttonName', buttonName);
-    params.append('url', url);
+  const params = new URLSearchParams();
+  params.append('type', 'click');
+  params.append('buttonName', buttonName);
+  params.append('url', url);
 
-    fetch(SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      body: params.toString(),
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-    }).then(() => {
-      // เมื่อบันทึกสำเร็จ (หรือส่งไปแล้ว) ค่อยเปิดลิงก์ใหม่
-      window.open(url, '_blank');
-    });
-  }
+  // ส่งข้อมูลไปที่ Google Script โดยใช้ keepalive เพื่อให้ส่งแม้หน้าเว็บจะเปลี่ยนไปแล้ว
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    body: params.toString(),
+    keepalive: true,
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+  });
+
+  // เปิดลิงก์ทันทีจากคำสั่ง onclick เดิม หรือจะใช้บรรทัดล่างนี้ก็ได้
+  window.open(url, '_blank');
+}
 
   document.getElementById('mainForm').addEventListener('submit', async function(e) {
     e.preventDefault();
