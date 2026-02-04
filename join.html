@@ -245,26 +245,25 @@
   </div>
 
   <script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwDn2K2eipTV5OOjcoQf6gTyER_UyHCAdJPuaNuXfWZnPUwdxLjGeKNXN-MUSiAero/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzefTD-0XWyZLVOs4e66COZQELguWkVXYF5FI86ZIMmErQG3_czvQTKQneNQ6ZMlC0B/exec";
   
-  function trackClick(buttonName, url) {
-  const params = new URLSearchParams();
-  params.append('type', 'click');
-  params.append('buttonName', buttonName);
-  params.append('url', url);
-
-  // ส่งข้อมูลไปที่ Google Script โดยใช้ keepalive เพื่อให้ส่งแม้หน้าเว็บจะเปลี่ยนไปแล้ว
-  fetch(SCRIPT_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    body: params.toString(),
-    keepalive: true,
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-  });
-
-  // เปิดลิงก์ทันทีจากคำสั่ง onclick เดิม หรือจะใช้บรรทัดล่างนี้ก็ได้
-  window.open(url, '_blank');
-}
+  // ฟังก์ชันบันทึกสถิติการคลิก
+  function trackClick(label, url) {
+    const params = new URLSearchParams();
+    params.append('type', 'click');
+    params.append('buttonName', label);
+  
+    // ยิงข้อมูลไปหา Apps Script โดยไม่รอผลตอบกลับ (เพื่อความเร็ว)
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: params.toString(),
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+    });
+  
+    // เปิดลิงก์ปลายทางทันที
+    window.open(url, '_blank');
+  }
 
   document.getElementById('mainForm').addEventListener('submit', async function(e) {
     e.preventDefault();
