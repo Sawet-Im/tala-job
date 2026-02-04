@@ -245,7 +245,24 @@
   </div>
 
   <script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8cNi-9W2mf0eQ7VmO3ffOXYT6iBl6dilfRWJZLTEbw0bwXsTHQtQT1_xgv3ZZmydN/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzJBe3F1KdA2GZpBl497CT5zoibutm5v3_Hd8L3ksBJNUpeXcmQKceK-rGg0n7H-rCy/exec";
+  
+  function trackClick(buttonName, url) {
+    const params = new URLSearchParams();
+    params.append('type', 'click');
+    params.append('buttonName', buttonName);
+    params.append('url', url);
+
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: params.toString(),
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+    }).then(() => {
+      // เมื่อบันทึกสำเร็จ (หรือส่งไปแล้ว) ค่อยเปิดลิงก์ใหม่
+      window.open(url, '_blank');
+    });
+  }
 
   document.getElementById('mainForm').addEventListener('submit', async function(e) {
     e.preventDefault();
